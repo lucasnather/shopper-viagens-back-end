@@ -45,6 +45,7 @@ model Ride {
   distance    String
   duration    String
   value       String
+  confirm     Boolean  @default(false)
   createdAt   DateTime @default(now()) @map("created_at")
   customer    Customer @relation(fields: [customerId], references: [id])
   customerId  String   @map("customer_id")

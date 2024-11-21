@@ -2,7 +2,8 @@ import 'dotenv/config'
 import { z } from 'zod'
 
 const envShema = z.object({
-    PORT: z.coerce.number()
+    PORT: z.coerce.number(),
+    GOOGLE_API_KEY: z.string()
 })
 
 const _env = envShema.safeParse(process.env)

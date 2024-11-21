@@ -2,46 +2,49 @@ import { randomUUID } from "node:crypto"
 
 export class Ride {
 
-    private id: string
+    private id: number
     private date: Date
     private origin: string
     private destination: string
     private distance: string
     private duration: string
     private value: number
-    private createdAt: Date
     private customerId: string
     private driverId: string
+    private createdAt?: Date
 
     constructor(
-        id: string,
         date: Date,
         origin: string,
         destination: string,
         distance: string,
         duration: string,
         value: number,
-        createdAt: Date,
         customerId: string,
         driverId: string,
+        createdAt?: Date,
     ) {
-        this.id = id || randomUUID()
+        this.id = this.idAutoincrement()
         this.date = date
         this.origin = origin
         this.destination = destination
         this.distance = distance
         this.duration = duration
         this.value = value
-        this.createdAt = createdAt || new Date()
         this.customerId = customerId
         this.driverId = driverId
+        this.createdAt = createdAt || new Date()
     }
 
     get getId() {
         return this.id
     }
 
-    get getCusomerId() {
+    private idAutoincrement() {
+        return ++this.id
+    }
+
+    get getCustomerId() {
         return this.customerId
     }
 
