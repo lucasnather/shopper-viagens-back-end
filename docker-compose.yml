@@ -1,0 +1,21 @@
+services:
+  viagens:
+    image: 'bitnami/postgresql'
+    container_name: shopper-viagens
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - ./db:/var/lib/postgresql
+    environment:
+      - POSTGRESQL_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRESQL_DATABASE=${POSTGRES_DATABASE}
+    networks:
+      - shopper-nather
+
+volumes:
+  db:
+
+networks:
+  shopper-nather:
+    driver: bridge
