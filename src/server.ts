@@ -1,5 +1,6 @@
 import express from 'express'
 import { env } from './env'
+import { rideRouter } from './infra/routes/ride-router'
 
 const app = express()
 
@@ -12,7 +13,8 @@ app.get("/test", async (req, res) => {
     })
 })
 
+app.use(rideRouter)
+
 app.listen(port, () => {
     console.log("Server Running")
 })
-

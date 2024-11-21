@@ -1,6 +1,5 @@
-import { Ride } from "@prisma/client";
+import { Ride } from "../../domain/Ride";
 import { GoogleMapsRepository } from "../../infra/repository/GoogleMapsRepository";
-import { RideRepository } from "../../infra/repository/RideRepository";
 
 interface CreateRideRequest {
     customerId: string,
@@ -15,17 +14,30 @@ interface CreateRideResponse {
 export class CreateRideService {
 
     constructor(
-        private rideRepository: RideRepository,
+        // rideRepository: RideRepository,
         private googleRepository: GoogleMapsRepository
     ) {}
 
     async execute(data: CreateRideRequest): Promise<CreateRideResponse> {
-        const tripData = await this.googleRepository.callComputesRoutes(data.origin, data.destination)
+       const trip = await this.googleRepository.callComputesRoutes(data.origin, data.destination)
+        const distance = trip.routes[0].distanceMeters
+        const duration = trip.routes[0].duration?.seconds
+        const durationToNumber = Number(duration)
 
-       console.log(tripData)
+       
+       const ride = new Ride(
+        new Date(),
+        data.origin,
+        data.destination,
+        distance,
+        durationToNumber,
+        10,
+        data.customerId,
+        data.customerId
+       )
 
        return {
-        ride: null
+        ride
        }
     }
 }

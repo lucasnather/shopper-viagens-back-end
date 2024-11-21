@@ -42,8 +42,8 @@ model Ride {
   date        DateTime
   origin      String
   destination String
-  distance    String
-  duration    String
+  distance    Int
+  duration    Int
   value       String
   confirm     Boolean  @default(false)
   createdAt   DateTime @default(now()) @map("created_at")

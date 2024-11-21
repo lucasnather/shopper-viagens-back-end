@@ -1,13 +1,12 @@
-import { randomUUID } from "node:crypto"
 
 export class Ride {
 
-    private id: number
+    private id: number = 0
     private date: Date
     private origin: string
     private destination: string
-    private distance: string
-    private duration: string
+    private distance: number | null | undefined
+    private duration: number | null | undefined
     private value: number
     private customerId: string
     private driverId: string
@@ -17,8 +16,8 @@ export class Ride {
         date: Date,
         origin: string,
         destination: string,
-        distance: string,
-        duration: string,
+        distance: number | null | undefined,
+        duration: number | null | undefined,
         value: number,
         customerId: string,
         driverId: string,
@@ -28,7 +27,7 @@ export class Ride {
         this.date = date
         this.origin = origin
         this.destination = destination
-        this.distance = distance
+        this.distance = distance 
         this.duration = duration
         this.value = value
         this.customerId = customerId
@@ -81,7 +80,7 @@ export class Ride {
         return this.distance
     }
 
-    set setDistance(distance: string) {
+    set setDistance(distance: number) {
         this.distance = distance
     }
 
@@ -90,7 +89,7 @@ export class Ride {
         return this.duration
     }
 
-    set setDuration(duration: string) {
+    set setDuration(duration: number) {
         this.duration = duration
     }
 
