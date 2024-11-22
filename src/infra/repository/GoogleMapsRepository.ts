@@ -44,7 +44,20 @@ export class GoogleMapsRepository {
                 }
             }
         )
-        return response
+
+        
+
+        return {
+            response,
+            origin: {
+                latitude: originLat,
+                longitude: originLng
+            },
+            destination: {
+                latitude: destinationLat,
+                longitude: destinationLng
+            }
+        }
     }
 
     private async calculateLongAndLat(origin: string, destination: string) {

@@ -9,7 +9,7 @@ export class Driver {
     private rating: string
     private tax: string
     private milage: number
-    private createdAt: Date
+    private createdAt?: Date
 
     constructor(
         id: string,
@@ -19,7 +19,7 @@ export class Driver {
         rating: string,
         tax: string,
         milage: number,
-        createdAt: Date,
+        createdAt?: Date,
     ) {
         this.id = id || randomUUID()
         this.name = name

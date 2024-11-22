@@ -3,19 +3,19 @@ import { randomUUID } from "node:crypto"
 export class Customer {
 
     private id: string
-    private email?: string
     private name: string
+    private email?: string 
     private createdAt: Date
 
     constructor(
         id: string,
         name: string,
-        createdAt: Date,
-        email?: string,
+        email?: string | null,
+        createdAt?: Date,
     ) {
         this.id = id || randomUUID()
-        this.email = email || ""
         this.name = name
+        this.email = email || ""
         this.createdAt = createdAt || new Date()
     }
 
