@@ -45,7 +45,7 @@ export class CreateRideService {
             distance: kilometer,
             duration: minute,
             options: {
-                findDriverByGreaterKm
+                drivers: findDriverByGreaterKm
             },
             routeResponse: trip.response,
         }
