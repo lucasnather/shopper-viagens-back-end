@@ -1,6 +1,5 @@
 import { Prisma } from "@prisma/client";
 import { randomUUID } from "node:crypto";
-import { Customer } from "../../domain/Customer";
 import { Driver } from "../../domain/Driver";
 
 export class DriverMapper {

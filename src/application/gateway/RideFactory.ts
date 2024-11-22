@@ -3,6 +3,7 @@ import { Ride } from "../../domain/Ride";
 
 export interface RideFactory {
     create(ride: Prisma.RideUncheckedCreateInput):Promise<Ride>
-    confirm(ride: Prisma.RideUpdateInput): Promise<Ride>
+    confirm(customerId: string, driverId: string): Promise<Ride>
     findById(rideId: number): Promise<Ride | null>
+    findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string): Promise<Ride[]>
 }

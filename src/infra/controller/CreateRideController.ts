@@ -1,13 +1,12 @@
 import type { Request, Response } from 'express'
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { CreateRideService } from "../../application/services/CreateRideService";
+import { InvalidDataError } from '../../domain/errors/invalid-data';
 import { CustomerMapper } from '../gateway/CustomerMapper';
 import { DriverMapper } from '../gateway/DriverMapper';
-import { RideMapper } from "../gateway/RideMapper";
 import { CustomerRepository } from '../repository/CustomerRepository';
 import { DriverRepository } from '../repository/DriverRepository';
 import { GoogleMapsRepository } from "../repository/GoogleMapsRepository";
-import { RideRepository } from "../repository/RideRepository";
 
 const createRideBodySchema = z.object({
     customer_id: z.string().uuid(),
@@ -24,7 +23,6 @@ export class CreateRideController {
 
             const customerMapper = new CustomerMapper()
             const driverMapper = new DriverMapper()
-            //const rideRepository = new RideRepository(rideMapper)
             const customerRepository = new CustomerRepository(customerMapper)
             const driverRepository = new DriverRepository(driverMapper)
             const googleRepository = new GoogleMapsRepository()
@@ -40,8 +38,15 @@ export class CreateRideController {
 
             return res.json(responseData)
         } catch(e) {
+            if(e instanceof ZodError || e instanceof InvalidDataError) {
+                res.json({
+                    "error_code": "INVALID_DATA",
+                    "error_description": e.message
+                })
+            }
+
             return res.json({
-                message: "Erro"
+                message: "Server Internal error"
             })
         }
     }

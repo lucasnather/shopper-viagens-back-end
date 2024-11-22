@@ -1,3 +1,4 @@
+import { InvalidDataError } from "../../domain/errors/invalid-data";
 import { CustomerRepository } from "../../infra/repository/CustomerRepository";
 import { DriverRepository } from "../../infra/repository/DriverRepository";
 import { GoogleMapsRepository } from "../../infra/repository/GoogleMapsRepository";
@@ -21,21 +22,20 @@ export class CreateRideService {
     ) {}
 
     async execute(data: CreateRideRequest): Promise<CreateRideResponse> {
+        if(data.origin === data.destination) throw new InvalidDataError()
+
         const findCustomerById = await this.customerRepository.findById(data.customerId)
 
         if(!findCustomerById) throw new Error("Customer Not Found");
    
         const trip = await this.googleRepository.callComputesRoutes(data.origin, data.destination)
         
-        
-
         const distance = trip.response.routes[0].distanceMeters
         const duration = trip.response.routes[0].duration?.seconds
         const durationToNumber = Number(duration)
         const ditanceToNumber = Number(distance)
         const kilometer = this.meterToKilometer(ditanceToNumber)
         const minute = this.secondsToMinutes(durationToNumber)
-
 
         const findDriverByGreaterKm = await this.driverRepository.findBManyByKilometer(kilometer)
         console.log(findDriverByGreaterKm)
