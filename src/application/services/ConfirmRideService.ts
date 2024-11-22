@@ -1,8 +1,8 @@
 import { DriverNotFoundError } from "../../domain/errors/DriverNotFoundError";
 import { InvalidMilageToDriveError } from "../../domain/errors/InvalidMilageToDriverError";
 import { Ride } from "../../domain/Ride";
-import { DriverRepository } from "../../infra/repository/DriverRepository";
-import { RideRepository } from "../../infra/repository/RideRepository";
+import { DriverFactory } from "../gateway/DriverFactory";
+import { RideFactory } from "../gateway/RideFactory";
 
 interface ConfirmRideRequest {
     customerId: string
@@ -26,8 +26,8 @@ interface ConfirmRideResponse {
 export class ConfirmRideService {
 
     constructor(
-        private rideRepository: RideRepository,
-        private driverRepository: DriverRepository
+        private rideRepository: RideFactory,
+        private driverRepository: DriverFactory
     ) {}
 
     async execute(data: ConfirmRideRequest): Promise<ConfirmRideResponse> {

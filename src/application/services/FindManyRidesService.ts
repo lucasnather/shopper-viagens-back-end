@@ -2,7 +2,7 @@ import { DriverNotFoundError } from "../../domain/errors/DriverNotFoundError";
 import { NoRidesRoundError } from "../../domain/errors/NoRidesRoundsError";
 import { Ride } from "../../domain/Ride";
 import { DriverRepository } from "../../infra/repository/DriverRepository";
-import { RideRepository } from "../../infra/repository/RideRepository";
+import { RideFactory } from "../gateway/RideFactory";
 
 interface FindManyRequest {
     customerId: string
@@ -13,10 +13,10 @@ interface FindManyResponse {
     ride: Ride[]
 }
 
-export class FindManyService {
+export class FindManyRidesService {
 
     constructor(
-        private rideRepository: RideRepository,
+        private rideRepository: RideFactory,
         private driverRepository: DriverRepository
     ) {}
 
@@ -25,10 +25,9 @@ export class FindManyService {
 
         if(data.driverId) {
             findDriverById = await this.driverRepository.findById(data.driverId)
-        }
 
-        if(!findDriverById) throw new DriverNotFoundError()
-        console.log("continua aqui")
+            if(!findDriverById) throw new DriverNotFoundError()
+        }
 
         const findRideById = await this.rideRepository.findManyFilteredByDriverIdOptinal(
             data.customerId,

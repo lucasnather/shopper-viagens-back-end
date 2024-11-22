@@ -3,7 +3,7 @@ import { Customer } from "../../../domain/Customer";
 
 export class InMemoryCustomerRepository implements CustomerFactory {
 
-    private customers: Customer[] = []
+    public customers: Customer[] = []
 
     async findById(customerId: string): Promise<Customer | null> {
         const findCustomer = this.customers.filter(customer => {

@@ -4,7 +4,7 @@ import { Ride } from "../../../domain/Ride";
 
 export class InMemoryRideRepository implements RideFactory {
 
-    private rides: Ride[] = []
+    rides: Ride[] = []
 
     async create(ride: Prisma.RideUncheckedCreateInput): Promise<Ride> {
         const createRide = new Ride(
@@ -34,11 +34,16 @@ export class InMemoryRideRepository implements RideFactory {
     }
 
     async findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string | undefined): Promise<Ride[]> {
-        const findManyRides = this.rides.filter(ride => {
-            return ride.getCustomerId === customerId && ride.getDriverId === driverId
-        })
-
-        return findManyRides
+        if(driverId) {
+            return this.rides.filter(ride => {
+                return ride.getCustomerId === customerId && ride.getDriverId === driverId
+            })
+        } else {
+            return this.rides.filter(ride => {
+                return ride.getCustomerId === customerId
+            })
+        }
+       
     }
     
 }

@@ -3,7 +3,7 @@ import { Driver } from "../../../domain/Driver";
 
 export class InMemoryDriverRepository implements DriverFactory {
 
-    private drivers: Driver[] = []
+    drivers: Driver[] = []
 
     async findById(driverId: string): Promise<Driver | null> {
         const findDriver = this.drivers.filter(driver => {

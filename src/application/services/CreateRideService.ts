@@ -1,7 +1,7 @@
 import { InvalidDataError } from "../../domain/errors/InvalidDataError";
-import { CustomerRepository } from "../../infra/repository/CustomerRepository";
-import { DriverRepository } from "../../infra/repository/DriverRepository";
 import { GoogleMapsRepository } from "../../infra/repository/GoogleMapsRepository";
+import { CustomerFactory } from "../gateway/CustomerFactory";
+import { DriverFactory } from "../gateway/DriverFactory";
 
 interface CreateRideRequest {
     customerId: string,
@@ -16,8 +16,8 @@ interface CreateRideResponse {
 export class CreateRideService {
 
     constructor(
-        private customerRepository: CustomerRepository,
-        private driverRepository: DriverRepository,
+        private customerRepository: CustomerFactory,
+        private driverRepository: DriverFactory,
         private googleRepository: GoogleMapsRepository
     ) {}
 
@@ -38,7 +38,6 @@ export class CreateRideService {
         const minute = this.secondsToMinutes(durationToNumber)
 
         const findDriverByGreaterKm = await this.driverRepository.findBManyByKilometer(kilometer)
-        console.log(findDriverByGreaterKm)
 
         const responseData = {
             origin: trip.origin,
@@ -51,11 +50,9 @@ export class CreateRideService {
             routeResponse: trip.response,
         }
 
-        console.log(responseData)
-
-       return {
-        responseData
-       }
+        return {
+            responseData
+        }
     }
 
     private meterToKilometer(meter: number) {
