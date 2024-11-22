@@ -1,4 +1,4 @@
-import { InvalidDataError } from "../../domain/errors/invalid-data";
+import { InvalidDataError } from "../../domain/errors/InvalidDataError";
 import { CustomerRepository } from "../../infra/repository/CustomerRepository";
 import { DriverRepository } from "../../infra/repository/DriverRepository";
 import { GoogleMapsRepository } from "../../infra/repository/GoogleMapsRepository";

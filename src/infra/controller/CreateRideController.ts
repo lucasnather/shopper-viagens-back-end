@@ -1,12 +1,7 @@
 import type { Request, Response } from 'express'
 import { z, ZodError } from "zod";
-import { CreateRideService } from "../../application/services/CreateRideService";
-import { InvalidDataError } from '../../domain/errors/invalid-data';
-import { CustomerMapper } from '../gateway/CustomerMapper';
-import { DriverMapper } from '../gateway/DriverMapper';
-import { CustomerRepository } from '../repository/CustomerRepository';
-import { DriverRepository } from '../repository/DriverRepository';
-import { GoogleMapsRepository } from "../repository/GoogleMapsRepository";
+import { InvalidDataError } from '../../domain/errors/InvalidDataError';
+import { MakeCreateRideFactory } from '../factory/MakeCreateRideFactory';
 
 const createRideBodySchema = z.object({
     customer_id: z.string().uuid(),
@@ -21,12 +16,7 @@ export class CreateRideController {
         try {
             const { customer_id, destination, origin } = createRideBodySchema.parse(req.body)
 
-            const customerMapper = new CustomerMapper()
-            const driverMapper = new DriverMapper()
-            const customerRepository = new CustomerRepository(customerMapper)
-            const driverRepository = new DriverRepository(driverMapper)
-            const googleRepository = new GoogleMapsRepository()
-            const createRideService = new CreateRideService(customerRepository, driverRepository, googleRepository)
+           const createRideService = MakeCreateRideFactory.factory()
 
             const { responseData } = await createRideService.execute({
                 customerId: customer_id,
@@ -43,6 +33,7 @@ export class CreateRideController {
                     "error_code": "INVALID_DATA",
                     "error_description": e.message
                 })
+                return
             }
 
             return res.json({

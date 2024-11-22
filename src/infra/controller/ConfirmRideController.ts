@@ -1,11 +1,8 @@
 import type { Request, Response } from 'express'
 import { z, ZodError } from "zod";
-import { InvalidDataError } from '../../domain/errors/invalid-data';
-import { DriverMapper } from '../gateway/DriverMapper';
-import { RideMapper } from "../gateway/RideMapper";
-import { DriverRepository } from '../repository/DriverRepository';
-import { RideRepository } from "../repository/RideRepository";
-import { ConfirmRideService } from "../../application/services/ConfirmRideService"
+import { DriverNotFoundError } from '../../domain/errors/DriverNotFoundError';
+import { InvalidMilageToDriveError } from '../../domain/errors/InvalidMilageToDriverError';
+import { MakeConfirmRideFactory } from '../factory/MakeConfirmRideFactory';
 
 const confirmRideBodySchema = z.object({
     customer_id: z.string().uuid(),
@@ -27,13 +24,9 @@ export class ConfirmRideController {
         try {
             const { customer_id, destination, distance, driver, duration, origin, value } = confirmRideBodySchema.parse(req.body)
 
-            const rideMapper = new RideMapper()
-            const driverMapper = new DriverMapper()
-            const rideRepository = new RideRepository(rideMapper)
-            const driverRepository = new DriverRepository(driverMapper)
-            const confirmRideService = new ConfirmRideService(rideRepository, driverRepository)
+            const confirmRideService = MakeConfirmRideFactory.factory()
 
-            const { ride } = await confirmRideService.execute({
+            await confirmRideService.execute({
                 customerId: customer_id,
                 destination,
                 origin,
@@ -47,11 +40,27 @@ export class ConfirmRideController {
                 success: true
             })
         } catch(e) {
-            if(e instanceof ZodError || e instanceof InvalidDataError) {
+            if(e instanceof ZodError) {
                 res.json({
                     "error_code": "INVALID_DATA",
                     "error_description": e.message
                 })
+                return
+            }
+
+            if(e instanceof DriverNotFoundError) {
+                res.json({
+                    "error_code": e.name,
+                    "error_description": e.message
+                })
+                return
+            }
+            if(e instanceof InvalidMilageToDriveError) {
+                res.json({
+                    "error_code": e.name,
+                    "error_description": e.message
+                })
+                return
             }
 
             return res.json({

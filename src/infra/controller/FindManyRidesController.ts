@@ -1,12 +1,8 @@
 import type { Request, Response } from 'express'
 import { z, ZodError } from "zod";
-import { InvalidDataError } from '../../domain/errors/invalid-data';
-import { DriverMapper } from '../gateway/DriverMapper';
-import { RideMapper } from "../gateway/RideMapper";
-import { DriverRepository } from '../repository/DriverRepository';
-import { RideRepository } from "../repository/RideRepository";
-import { ConfirmRideService } from "../../application/services/ConfirmRideService"
-import { FindManyService } from '../../application/services/FindManyRidesService';
+import { NoRidesRoundError } from '../../domain/errors/NoRidesRoundsError';
+import { DriverNotFoundError } from '../../domain/errors/DriverNotFoundError';
+import { MakeFindManyRidesFactory } from '../factory/MakeFindManyRidesFactory';
 
 const findManysRideParamSchema = z.object({
     customer_id: z.string().uuid(),
@@ -23,11 +19,8 @@ export class FindManyRidesController {
         try {
             const { customer_id } = findManysRideParamSchema.parse(req.params)
             const { driver_id } = findManysRideQuerySchema.parse(req.query)
-            console.log(driver_id)
 
-            const rideMapper = new RideMapper()
-            const rideRepository = new RideRepository(rideMapper)
-            const findManyRidesService = new FindManyService(rideRepository)
+            const findManyRidesService = MakeFindManyRidesFactory.factory()
 
             const { ride } = await findManyRidesService.execute({
                 customerId: customer_id,
@@ -36,11 +29,28 @@ export class FindManyRidesController {
 
             return res.json(ride)
         } catch(e) {
-            if(e instanceof ZodError || e instanceof InvalidDataError) {
+            if(e instanceof ZodError) {
                 res.json({
                     "error_code": "INVALID_DATA",
                     "error_description": e.message
                 })
+                return
+            }
+
+            if(e instanceof DriverNotFoundError) {
+                res.json({
+                    "error_code": e.name,
+                    "error_description": e.message
+                })
+                return
+            }
+
+            if(e instanceof NoRidesRoundError) {
+                res.json({
+                    "error_code": "INVALID_DATA",
+                    "error_description": e.message
+                })
+                return
             }
 
             return res.json({

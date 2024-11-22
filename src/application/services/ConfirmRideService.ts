@@ -1,3 +1,5 @@
+import { DriverNotFoundError } from "../../domain/errors/DriverNotFoundError";
+import { InvalidMilageToDriveError } from "../../domain/errors/InvalidMilageToDriverError";
 import { Ride } from "../../domain/Ride";
 import { DriverRepository } from "../../infra/repository/DriverRepository";
 import { RideRepository } from "../../infra/repository/RideRepository";
@@ -31,9 +33,9 @@ export class ConfirmRideService {
     async execute(data: ConfirmRideRequest): Promise<ConfirmRideResponse> {
         const findDriverById = await this.driverRepository.findById(data.driver.id)
 
-        if(!findDriverById) throw new Error("Driver Not Found")
+        if(!findDriverById) throw new DriverNotFoundError()
 
-        if(data.distance < findDriverById.getMilage)  throw new Error("Milage Invalid for the driver")
+        if(data.distance < findDriverById.getMilage)  throw new InvalidMilageToDriveError()
 
         const ride = await this.rideRepository.create({
             customerId: data.customerId,

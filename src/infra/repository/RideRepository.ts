@@ -7,10 +7,6 @@ import { RideMapper } from "../gateway/RideMapper";
 export class RideRepository implements RideFactory {
 
     constructor( private rideMapper: RideMapper ) {}
-    
-    confirm(customerId: string, driverId: string): Promise<Ride> {
-        throw new Error("Method not implemented.");
-    }
 
     async create(ride: Prisma.RideUncheckedCreateInput): Promise<Ride> {
         const createRide = await prisma.ride.create({
