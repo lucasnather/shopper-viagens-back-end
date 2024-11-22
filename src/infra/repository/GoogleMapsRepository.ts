@@ -45,8 +45,6 @@ export class GoogleMapsRepository {
             }
         )
 
-        
-
         return {
             response,
             origin: {
