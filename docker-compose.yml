@@ -12,6 +12,19 @@ services:
       - POSTGRESQL_DATABASE=${POSTGRES_DATABASE}
     networks:
       - shopper-nather
+  server:
+    build: 
+      context: .
+    ports:
+      - "${PORT}:${PORT}"
+      - "5555:5555"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_DATABASE}:${POSTGRES_PORT}/${POSTGRES_DATABASE}?schema=public
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    networks:
+      - shopper-nather
+    depends_on:
+      - viagens
 
 volumes:
   db:

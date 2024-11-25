@@ -1,6 +1,7 @@
 import { beforeEach, it, describe, expect } from 'vitest'
 import { Customer } from '../../domain/Customer'
 import { Driver } from '../../domain/Driver'
+import { CustomerNotFoundError } from '../../domain/errors/CustomerNotFoundError'
 import { DriverNotFoundError } from '../../domain/errors/DriverNotFoundError'
 import { NoRidesRoundError } from '../../domain/errors/NoRidesRoundsError'
 import { Ride } from '../../domain/Ride'
@@ -138,7 +139,7 @@ describe("Unit Test -> Find Many Ride Service", () => {
             await sut.execute({
                 customerId:  "INVALID_CUSTOMER"
              })
-        }).rejects.toBeInstanceOf(NoRidesRoundError)
+        }).rejects.toBeInstanceOf(CustomerNotFoundError)
     })
 
     it("Shouldnt be able to find a ride with invalid driver", async () => {
