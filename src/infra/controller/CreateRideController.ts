@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express'
 import { z, ZodError } from "zod";
+import { CustomerNotFoundError } from '../../domain/errors/CustomerNotFoundError';
 import { InvalidDataError } from '../../domain/errors/InvalidDataError';
 import { MakeCreateRideFactory } from '../factory/MakeCreateRideFactory';
 
@@ -7,7 +8,7 @@ const createRideBodySchema = z.object({
     customer_id: z.string().uuid(),
     origin: z.string(),
     destination: z.string()
-})
+}).required()
 
 export class CreateRideController {
 
@@ -26,9 +27,18 @@ export class CreateRideController {
 
             return res.json(responseData)
         } catch(e) {
+
             if(e instanceof ZodError || e instanceof InvalidDataError) {
                 res.json({
                     "error_code": "INVALID_DATA",
+                    "error_description": e.message
+                })
+                return
+            }
+
+            if(e instanceof CustomerNotFoundError) {
+                res.json({
+                    "error_code": "CUSTOMER_NOT_FOUND",
                     "error_description": e.message
                 })
                 return

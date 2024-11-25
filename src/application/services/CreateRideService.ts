@@ -1,3 +1,4 @@
+import { CustomerNotFoundError } from "../../domain/errors/CustomerNotFoundError";
 import { InvalidDataError } from "../../domain/errors/InvalidDataError";
 import { GoogleMapsRepository } from "../../infra/repository/GoogleMapsRepository";
 import { CustomerFactory } from "../gateway/CustomerFactory";
@@ -26,7 +27,7 @@ export class CreateRideService {
 
         const findCustomerById = await this.customerRepository.findById(data.customerId)
 
-        if(!findCustomerById) throw new Error("Customer Not Found");
+        if(!findCustomerById) throw new CustomerNotFoundError();
    
         const trip = await this.googleRepository.callComputesRoutes(data.origin, data.destination)
         

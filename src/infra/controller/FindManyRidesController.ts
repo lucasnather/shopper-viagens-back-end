@@ -39,7 +39,7 @@ export class FindManyRidesController {
 
             if(e instanceof DriverNotFoundError) {
                 res.json({
-                    "error_code": e.name,
+                    "error_code": "DRIVER_NOT_FOUND",
                     "error_description": e.message
                 })
                 return
@@ -47,7 +47,7 @@ export class FindManyRidesController {
 
             if(e instanceof NoRidesRoundError) {
                 res.json({
-                    "error_code": "INVALID_DATA",
+                    "error_code": "NO_RIDE_FOUND",
                     "error_description": e.message
                 })
                 return
