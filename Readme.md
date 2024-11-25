@@ -41,6 +41,8 @@ $ npm install
 ## Preencha as Variáveis de Ambiente -> pode pegar seu template em .env.example
 ## Crie o arquivo .env
 
+## Acesse este link para criar sua chave do google -> https://developers.google.com/maps/documentation/routes/cloud-setup?hl=pt-br -> Vá até em "Criar um projeto"
+
 - PORT=8080
 - POSTGRES_PORT=5432
 - POSTGRES_USERNAME=username
