@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { RideFactory } from "../../../application/gateway/RideFactory";
+import { RideFactory, RideProps } from "../../../application/gateway/RideFactory";
 import { Ride } from "../../../domain/Ride";
 
 export class InMemoryRideRepository implements RideFactory {
@@ -33,14 +33,41 @@ export class InMemoryRideRepository implements RideFactory {
         return findRide[0]
     }
 
-    async findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string | undefined): Promise<Ride[]> {
+    async findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string | undefined): Promise<RideProps[]> {
         if(driverId) {
-            return this.rides.filter(ride => {
+            const ride = this.rides.filter(ride => {
                 return ride.getCustomerId === customerId && ride.getDriverId === driverId
             })
+
+            return ride.map(r => {
+                return {
+                    id: r.getId,
+                    date: r.getDate,
+                    distance: r.getDistance,
+                    duration: r.getDuration,
+                    value: r.getValue,
+                    destination: r.getDestination,
+                    origin: r.getOrigin,  
+                    driverName: "driver"
+                }
+            })
+        
         } else {
-            return this.rides.filter(ride => {
+            const ride = this.rides.filter(ride => {
                 return ride.getCustomerId === customerId
+            })
+
+            return ride.map(r => {
+                return {
+                    id: r.getId,
+                    date: r.getDate,
+                    distance: r.getDistance,
+                    duration: r.getDuration,
+                    value: r.getValue,
+                    destination: r.getDestination,
+                    origin: r.getOrigin,  
+                    driverName: "driver"
+                }
             })
         }
        

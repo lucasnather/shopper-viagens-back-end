@@ -11,7 +11,7 @@ const port = env.PORT
 app.use(express.json())
 app.use(cors({
     methods: ["POST", "PATCH", "GET"],
-    origin: "htto://localhost"
+    origin: "http://localhost:5173",
 }))
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { RideFactory } from "../../application/gateway/RideFactory";
+import { RideFactory, RideProps } from "../../application/gateway/RideFactory";
 import { prisma } from "../../database/prisma";
 import { Ride } from "../../domain/Ride";
 import { RideMapper } from "../gateway/RideMapper";
@@ -40,7 +40,7 @@ export class RideRepository implements RideFactory {
         return this.rideMapper.toDomain(findRideById)
     }
 
-    async findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string): Promise<Ride[]> {
+    async findManyFilteredByDriverIdOptinal(customerId: string, driverId?: string): Promise<RideProps[]> {
         const findManyRides = await prisma.ride.findMany({
             where: {
                 AND: [
@@ -51,11 +51,38 @@ export class RideRepository implements RideFactory {
                         driverId
                     }
                 ]
+            },
+            select: {
+                id: true,
+                date: true,
+                customerId: true,
+                driverId: true,
+                destination: true,
+                origin: true,
+                value: true,
+                distance: true,
+                duration: true,
+                driver: {
+                    select: {
+                        name: true
+                    } 
+                }
             }
         })
 
         return findManyRides.map(rides => {
-            return this.rideMapper.toDomain(rides)
+            const ride = this.rideMapper.toDomain(rides)
+
+            return {
+                id: ride.getId,
+                date: ride.getDate,
+                distance: ride.getDistance,
+                duration: ride.getDuration,
+                value: ride.getValue,
+                destination: ride.getDestination,
+                origin: ride.getOrigin,  
+                driverName: rides.driver.name 
+            }
         })
     }
 

@@ -1,8 +1,8 @@
 import { DriverNotFoundError } from "../../domain/errors/DriverNotFoundError";
 import { NoRidesRoundError } from "../../domain/errors/NoRidesRoundsError";
-import { Ride } from "../../domain/Ride";
 import { DriverRepository } from "../../infra/repository/DriverRepository";
-import { RideFactory } from "../gateway/RideFactory";
+import { DriverFactory } from "../gateway/DriverFactory";
+import { RideFactory, RideProps } from "../gateway/RideFactory";
 
 interface FindManyRequest {
     customerId: string
@@ -10,14 +10,14 @@ interface FindManyRequest {
 }
 
 interface FindManyResponse {
-    ride: Ride[]
+    ride: RideProps[]
 }
 
 export class FindManyRidesService {
 
     constructor(
         private rideRepository: RideFactory,
-        private driverRepository: DriverRepository
+        private driverRepository: DriverFactory
     ) {}
 
     async execute(data: FindManyRequest): Promise<FindManyResponse> {
@@ -36,8 +36,10 @@ export class FindManyRidesService {
 
         if(findRideById.length === 0) throw new NoRidesRoundError()
 
+        console.log(findRideById)
+
         return {
-            ride: findRideById
+            ride: findRideById,
         }
     }
 }

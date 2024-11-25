@@ -5,8 +5,8 @@ export class Ride {
     private date: Date
     private origin: string
     private destination: string
-    private distance: number | null | undefined
-    private duration: number | null | undefined
+    private distance: number
+    private duration: number
     private value: number
     private customerId: string
     private driverId: string
@@ -16,8 +16,8 @@ export class Ride {
         date: Date,
         origin: string,
         destination: string,
-        distance: number | null | undefined,
-        duration: number | null | undefined,
+        distance: number ,
+        duration: number,
         value: number,
         customerId: string,
         driverId: string,

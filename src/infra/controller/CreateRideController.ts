@@ -24,8 +24,6 @@ export class CreateRideController {
                 origin
             })
 
-            console.log(responseData)
-
             return res.json(responseData)
         } catch(e) {
             if(e instanceof ZodError || e instanceof InvalidDataError) {
