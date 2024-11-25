@@ -81,6 +81,8 @@ $ npm t
 
 ## Acesse a Documentação com Swagger -> http://localhost:8080/docs
 
+## Para testar o Front end acesse a fota /ride e pegue o ID -> Irá resgatar os usuários cadastrados na tabela customers 
+
 ## Aprendizado
 
 <p>Nesta aplicação aprendi como usar bibliotecas do Goolgle maps e como consumí-las para gerar todos os dados necessários para verificar a rota, também aprendi a como conteinerizar minha aplicação de uma forma mais simples</p> 
