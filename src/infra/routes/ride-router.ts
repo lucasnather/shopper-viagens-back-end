@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ConfirmRideController } from "../controller/ConfirmRideController";
 import { CreateRideController } from "../controller/CreateRideController";
+import { FindManyCustomersController } from "../controller/FindManyCustomersController";
 import { FindManyRidesController } from "../controller/FindManyRidesController";
 
 const router = Router()
@@ -8,6 +9,7 @@ const router = Router()
 const createRideController = new CreateRideController()
 const confirmRideController = new ConfirmRideController()
 const findManyRidesController = new FindManyRidesController()
+const findManyCustomersController = new FindManyCustomersController()
 
 router
    /**
@@ -235,6 +237,29 @@ router
 * 
  */
 .get('/ride/:customer_id', (req, res) => findManyRidesController.find(req, res))
+/**
+* @swagger
+* /ride:
+ *   get:
+ *     summary: Consultar todos os usuários
+ *     tags: [Customers]
+ *     description: Encontra todos os usuários com seu Id e Nome
+ *     responses:
+ *       200:
+ *         description: Lista de usuários
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: Id do usuário
+ *                 name:
+ *                   type: string
+ *                   description: Nome do usuário
+ */
+.get('/ride', (req, res) => findManyCustomersController.findMany(req, res))
 
 export const rideRouter = router
 

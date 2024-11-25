@@ -1,7 +1,8 @@
-import { CustomerFactory } from "../../../application/gateway/CustomerFactory";
+import { CustomerFactory, CustomerProps } from "../../../application/gateway/CustomerFactory";
 import { Customer } from "../../../domain/Customer";
 
 export class InMemoryCustomerRepository implements CustomerFactory {
+   
 
     public customers: Customer[] = []
 
@@ -13,6 +14,10 @@ export class InMemoryCustomerRepository implements CustomerFactory {
         if(findCustomer.length === 0) return null
 
         return findCustomer[0]
+    }
+
+    async findMany(): Promise<CustomerProps[]> {
+        throw new Error("Method not implemented.");
     }
 
 }
