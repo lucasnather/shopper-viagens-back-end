@@ -18,7 +18,7 @@ beforeEach(() => {
     rideRepository = new InMemoryRideRepository()
     customerRepository = new InMemoryCustomerRepository()
     driverRepository = new InMemoryDriverRepository()
-    sut = new FindManyRidesService(rideRepository, driverRepository)
+    sut = new FindManyRidesService(rideRepository, customerRepository , driverRepository)
 })
 
 describe("Unit Test -> Find Many Ride Service", () => {

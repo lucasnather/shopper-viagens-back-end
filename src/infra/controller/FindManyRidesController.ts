@@ -3,6 +3,7 @@ import { z, ZodError } from "zod";
 import { NoRidesRoundError } from '../../domain/errors/NoRidesRoundsError';
 import { DriverNotFoundError } from '../../domain/errors/DriverNotFoundError';
 import { MakeFindManyRidesFactory } from '../factory/MakeFindManyRidesFactory';
+import { CustomerNotFoundError } from '../../domain/errors/CustomerNotFoundError';
 
 const findManysRideParamSchema = z.object({
     customer_id: z.string().uuid(),
@@ -32,6 +33,14 @@ export class FindManyRidesController {
             if(e instanceof ZodError) {
                 res.json({
                     "error_code": "INVALID_DATA",
+                    "error_description": e.message
+                })
+                return
+            }
+
+            if(e instanceof CustomerNotFoundError) {
+                res.json({
+                    "error_code": "CUSTOMER_NOT_FOUND",
                     "error_description": e.message
                 })
                 return
